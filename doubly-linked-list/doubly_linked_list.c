@@ -8,11 +8,14 @@ typedef struct DoublyLinkedList {
   struct DoublyLinkedList *next;
 } DLL;
 
-void insert(DLL *head, int value) {
+DLL *insert(DLL *head, int value) {
   head->previous = malloc(sizeof(DLL));
   head->previous->previous = NULL;
   head->previous->root = value;
   head->previous->next = head;
+  
+  head = head->previous;
+  return head;
 }
 
 void append(DLL *head, int value) {
@@ -40,9 +43,6 @@ int print_list(DLL *head, char mode[]) {
     }
   }
   else if (strncmp(mode, "normal", sizeof(mode) / sizeof(char))) {
-    if (head->previous != NULL) {
-      head = head->previous;
-    }
     while (head != NULL) {
       printf("%d", head->root);
       head = head->next;
@@ -61,7 +61,8 @@ int main(void) {
   DLL *head = malloc(sizeof(DLL));
   head->next = NULL;
   head->root = 1;
-  insert(head, 2);
+  head = insert(head, 3);
+  head = insert(head, -5);
   append(head, 3);
   append(head, 4);
   append(head, 5);
